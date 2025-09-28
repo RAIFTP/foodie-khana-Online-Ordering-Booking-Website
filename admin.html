@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Bookings</title>
+</head>
+<body>
+  <h1>Admin - Bookings</h1>
+  <div id="ordersList"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const ordersList = document.getElementById('ordersList');
+      let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+      if (orders.length === 0) {
+        ordersList.innerHTML = "<p>No bookings yet.</p>";
+        return;
+      }
+
+      orders.forEach((order, index) => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <h3>Booking #${index + 1}</h3>
+          <p><strong>Name:</strong> ${order.name}</p>
+          <p><strong>Email:</strong> ${order.email}</p>
+          <p><strong>Phone:</strong> ${order.phone}</p>
+          <p><strong>Date:</strong> ${order.date} at ${order.time}</p>
+          <p><strong>Type:</strong> ${order.type}</p>
+          <p><strong>Requests:</strong> ${order.requests || "None"}</p>
+          <p><em>Submitted: ${order.createdAt}</em></p>
+          <hr>
+        `;
+        ordersList.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
