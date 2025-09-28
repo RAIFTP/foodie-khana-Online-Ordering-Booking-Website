@@ -3,24 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Bookings</title>
+  <title>Admin Dashboard - Bookings</title>
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
-  <h1>Admin - Bookings</h1>
-  <div id="ordersList"></div>
+
+  <header>
+    <h1>Admin Dashboard - Bookings</h1>
+  </header>
+
+  <main id="ordersList"></main>
+
+  <!-- Reply Modal (draggable) -->
+  <div id="replyModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Reply to Customer</h2>
+        <div class="modal-controls">
+          <button class="drag-handle" title="Drag">⠿</button>
+          <button class="close" aria-label="Close">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="replyForm">
+          <textarea id="replyMessage" placeholder="Type your message..." rows="5" required></textarea>
+          <button type="submit">Send Reply</button>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const ordersList = document.getElementById('ordersList');
+    const ordersList = document.getElementById('ordersList');
+    const modal = document.getElementById('replyModal');
+    const closeBtn = modal.querySelector('.close');
+    const replyForm = document.getElementById('replyForm');
+    let currentOrderIndex = null;
+
+    function loadOrders() {
       let orders = JSON.parse(localStorage.getItem('orders')) || [];
 
       if (orders.length === 0) {
-        ordersList.innerHTML = "<p>No bookings yet.</p>";
+        ordersList.innerHTML = "<p class='empty'>No bookings yet.</p>";
         return;
       }
 
+      ordersList.innerHTML = "";
       orders.forEach((order, index) => {
         const div = document.createElement('div');
+        div.className = "order-card";
         div.innerHTML = `
           <h3>Booking #${index + 1}</h3>
           <p><strong>Name:</strong> ${order.name}</p>
@@ -30,11 +61,140 @@
           <p><strong>Type:</strong> ${order.type}</p>
           <p><strong>Requests:</strong> ${order.requests || "None"}</p>
           <p><em>Submitted: ${order.createdAt}</em></p>
-          <hr>
+          <div class="replies">
+            ${order.replies && order.replies.length > 0 ? 
+              `<strong>Replies:</strong><ul>${order.replies.map(r => `<li>${r}</li>`).join("")}</ul>` : ""}
+          </div>
+          <div class="buttons">
+            <button class="replyBtn">Reply</button>
+            <button class="completeBtn">${order.completed ? "Completed" : "Mark Completed"}</button>
+            <button class="deleteBtn">Delete</button>
+          </div>
         `;
         ordersList.appendChild(div);
+
+        // Reply
+        div.querySelector('.replyBtn').onclick = () => {
+          modal.style.display = "block";
+          currentOrderIndex = index;
+        };
+
+        // Complete
+        div.querySelector('.completeBtn').onclick = () => {
+          orders[index].completed = !orders[index].completed;
+          localStorage.setItem('orders', JSON.stringify(orders));
+          loadOrders();
+        };
+
+        // Delete
+        div.querySelector('.deleteBtn').onclick = () => {
+          if (confirm("Are you sure you want to delete this booking?")) {
+            orders.splice(index, 1);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            loadOrders();
+          }
+        };
       });
+    }
+
+    // Modal close
+    closeBtn.onclick = () => { modal.style.display = "none"; };
+    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+
+    // Make modal draggable by its header (mouse + touch)
+    const modalContent = modal.querySelector('.modal-content');
+    const modalHeader = modalContent.querySelector('.modal-header');
+    let isDragging = false;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    function startDrag(clientX, clientY) {
+      const rect = modalContent.getBoundingClientRect();
+      // set absolute positioning and remove centering transform
+      modalContent.style.position = 'absolute';
+      modalContent.style.margin = '0';
+      modalContent.style.left = rect.left + 'px';
+      modalContent.style.top = rect.top + 'px';
+      modalContent.style.transform = '';
+      isDragging = true;
+      dragOffsetX = clientX - rect.left;
+      dragOffsetY = clientY - rect.top;
+      document.body.style.userSelect = 'none';
+    }
+
+    function onMove(clientX, clientY) {
+      if (!isDragging) return;
+      let left = clientX - dragOffsetX;
+      let top = clientY - dragOffsetY;
+      // keep inside viewport
+      const maxLeft = window.innerWidth - modalContent.offsetWidth;
+      const maxTop = window.innerHeight - modalContent.offsetHeight;
+      left = Math.max(8, Math.min(left, maxLeft - 8));
+      top = Math.max(8, Math.min(top, maxTop - 8));
+      modalContent.style.left = left + 'px';
+      modalContent.style.top = top + 'px';
+    }
+
+    function stopDrag() {
+      isDragging = false;
+      document.body.style.userSelect = '';
+    }
+
+    modalHeader.addEventListener('mousedown', (e) => { startDrag(e.clientX, e.clientY); });
+    document.addEventListener('mousemove', (e) => { onMove(e.clientX, e.clientY); });
+    document.addEventListener('mouseup', stopDrag);
+
+    // touch support
+    modalHeader.addEventListener('touchstart', (e) => {
+      const t = e.touches[0]; startDrag(t.clientX, t.clientY);
+    }, {passive: true});
+    document.addEventListener('touchmove', (e) => { const t = e.touches[0]; onMove(t.clientX, t.clientY); }, {passive: true});
+    document.addEventListener('touchend', stopDrag);
+
+    // When reply button opens modal, center it then show
+    // (we already set modal.style.display when opening, but ensure centering)
+    const originalReplyOpen = (index) => {
+      modal.style.display = 'block';
+      // ensure modalContent is centered initially
+      requestAnimationFrame(() => {
+        modalContent.style.position = 'absolute';
+        modalContent.style.left = Math.max(8, (window.innerWidth - modalContent.offsetWidth) / 2) + 'px';
+        modalContent.style.top = Math.max(8, (window.innerHeight - modalContent.offsetHeight) / 2) + 'px';
+      });
+    };
+
+    // We update the reply button handler to call originalReplyOpen when showing modal
+    // (The per-order loop already sets modal.style.display = 'block' and currentOrderIndex.)
+
+    // Reply form submit
+    replyForm.onsubmit = e => {
+      e.preventDefault();
+      const message = document.getElementById('replyMessage').value.trim();
+      if (message && currentOrderIndex !== null) {
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
+        if (!orders[currentOrderIndex].replies) orders[currentOrderIndex].replies = [];
+        orders[currentOrderIndex].replies.push(message);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        document.getElementById('replyMessage').value = "";
+        modal.style.display = "none";
+        loadOrders();
+        alert(`Reply sent to ${orders[currentOrderIndex].email}`);
+      }
+    };
+
+    // small helper: intercept clicks that opened modal earlier and center it
+    document.addEventListener('click', (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains('replyBtn')) {
+        // center modal after it's shown
+        requestAnimationFrame(() => {
+          modalContent.style.left = Math.max(8, (window.innerWidth - modalContent.offsetWidth) / 2) + 'px';
+          modalContent.style.top = Math.max(8, (window.innerHeight - modalContent.offsetHeight) / 2) + 'px';
+        });
+      }
     });
+
+    loadOrders();
   </script>
+
 </body>
 </html>
