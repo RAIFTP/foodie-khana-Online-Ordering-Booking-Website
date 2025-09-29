@@ -95,6 +95,7 @@ section h2 {
   transform: translateY(-8px);
 }
 
+.food-item:hover {
   background: #f8f8f8;
 }
 
