@@ -7,6 +7,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="order.css" />
 </head>
+<!-- Kunsi AI Assistant -->
+<div id="kunsiChat" class="kunsi-chat">
+  <div class="chat-header">
+    <span>Kunsi 🤖</span>
+    <button id="closeKunsi">×</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-footer">
+    <input type="text" id="kunsiInput" placeholder="Ask Kunsi about our food or restaurant...">
+    <button id="sendKunsi">Send</button>
+  </div>
+</div>
+
+<button id="openKunsi" class="kunsi-btn">💬 Ask Kunsi</button>
+
 <body>
 
   <header>
@@ -16,6 +31,8 @@
   </header>
 
   <div class="container">
+
+
 
     <section>
       <h2>🚚 Delivery Details</h2>
@@ -33,12 +50,30 @@
         <input type="tel" id="phone" placeholder="Phone Number" required>
         <input type="date" id="date" required>
         <input type="time" id="time" required>
-        <select id="type" required>
-          <option value="">Select Booking Type</option>
-          <option value="table">Table</option>
-          <option value="birthday">Birthday Event</option>
-          <option value="team lunch">Team Lunch</option>
+
+        <!-- Food Item Dropdown -->
+        <select id="foodItem" required>
+          <option value="">Select Food Item</option>
+          <option value="Chicken Biriyani">Chicken Biriyani</option>
+          <option value="Porotta & Beef">Porotta & Beef</option>
+          <option value="Veg Meals">Veg Meals</option>
+          <option value="Shawarma Roll">Shawarma Roll</option>
+          <option value="Shawarma Plate">Shawarma Plate</option>
+          <option value="Shawaya">Shawaya</option>
+          <option value="Kunsimol Fried Chicken">Kunsimol Fried Chicken</option>
+          <option value="Kunsi Special">Kunsi Special</option>
+          <option value="Ali Ka Dhosth Tea">Ali Ka Dhosth Tea</option>
+          <option value="Lava Biriyani">Lava Biriyani</option>
+          <option value="Malabar Porotta">Malabar Porotta</option>
+          <option value="Puttum Kadala">Puttum Kadala</option>
+          <option value="Egg Roast">Egg Roast</option>
+          <option value="Appam & Stew">Appam & Stew</option>
+          <option value="Fish Curry Meals">Fish Curry Meals</option>
         </select>
+
+        <!-- Price Input -->
+  <input type="number" id="price" placeholder="Price (₹)" min="0" required readonly>
+
         <textarea id="requests" placeholder="Any special requests..." rows="4"></textarea>
         <button type="submit">Submit Booking</button>
       </form>
@@ -82,63 +117,168 @@
 
   <!-- JavaScript -->
   <script>
-  // Sign-in Modal Logic
-  const signInBtn = document.getElementById('signInBtn');
-  const modal = document.getElementById('signInModal');
-  const closeBtn = document.querySelector('.modal .close');
+    // Sign-in Modal Logic
+    const signInBtn = document.getElementById('signInBtn');
+    const modal = document.getElementById('signInModal');
+    const closeBtn = document.querySelector('.modal .close');
 
-  signInBtn.onclick = function () {
-    modal.style.display = "block";
-  }
+    signInBtn.onclick = function () {
+      modal.style.display = "block";
+    }
 
-  closeBtn.onclick = function () {
-    modal.style.display = "none";
-  }
-
-  window.onclick = function (e) {
-    if (e.target === modal) {
+    closeBtn.onclick = function () {
       modal.style.display = "none";
     }
-  }
 
-  document.getElementById('signInForm').onsubmit = function (e) {
-    e.preventDefault();
-
-    const email = e.target.querySelector('input[type="email"]').value.trim();
-    const password = e.target.querySelector('input[type="password"]').value;
-
-    if (email === "raif@gmail.com" && password === "raif") {
-      alert("Welcome Admin!");
-      window.location.href = "admin.html"; 
-    } else {
-      alert("Invalid credentials. Please try again.");
+    window.onclick = function (e) {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
     }
 
-    modal.style.display = "none";
-  }
+    document.getElementById('signInForm').onsubmit = function (e) {
+      e.preventDefault();
+      const email = e.target.querySelector('input[type="email"]').value.trim();
+      const password = e.target.querySelector('input[type="password"]').value;
+      if (email === "raif@gmail.com" && password === "raif") {
+        alert("Welcome Admin!");
+        window.location.href = "admin.html"; 
+      } else {
+        alert("Invalid credentials. Please try again.");
+      }
+      modal.style.display = "none";
+    }
 
-  // Booking Form Logic (Store in localStorage)
-  document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    // Booking Form Logic (Store in localStorage)
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const order = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        date: document.getElementById('date').value,
+        time: document.getElementById('time').value,
+        foodItem: document.getElementById('foodItem').value, // store selected food
+        price: document.getElementById('price').value, // store price
+        requests: document.getElementById('requests').value,
+        createdAt: new Date().toLocaleString()
+      };
+
+      let orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+
+      alert("Your booking has been submitted!");
+      this.reset();
+    });
+
+    // Pre-select food item if passed in URL
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(function() {
+        const foodItem = getQueryParam('item');
+        // Fixed prices for each food item
+        const foodPrices = {
+          "Chicken Biriyani": 150,
+          "Porotta & Beef": 180,
+          "Veg Meals": 120,
+          "Shawarma Roll": 90,
+          "Shawarma Plate": 140,
+          "Shawaya": 200,
+          "Kunsimol Fried Chicken": 160,
+          "Kunsi Special": 220,
+          "Ali Ka Dhosth Tea": 40,
+          "Lava Biriyani": 250,
+          "Malabar Porotta": 60,
+          "Puttum Kadala": 80,
+          "Egg Roast": 70,
+          "Appam & Stew": 90,
+          "Fish Curry Meals": 180
+        };
+
+        const foodSelect = document.getElementById('foodItem');
+        const priceInput = document.getElementById('price');
+        console.log('foodSelect:', foodSelect);
+        console.log('priceInput:', priceInput);
+        console.log('foodItem from URL:', foodItem);
+        function setPriceForFood(food) {
+          console.log('Setting price for food:', food, 'price:', foodPrices[food]);
+          if (foodPrices[food]) {
+            priceInput.value = foodPrices[food];
+          } else {
+            priceInput.value = '';
+          }
+        }
+        if (foodSelect && priceInput) {
+          // Always set price on page load
+          if (foodItem && foodPrices[foodItem]) {
+            foodSelect.value = foodItem;
+            setPriceForFood(foodItem);
+          } else {
+            setPriceForFood(foodSelect.value);
+          }
+          // Always set price on change
+          foodSelect.addEventListener('change', function() {
+            setPriceForFood(foodSelect.value);
+          });
+        } else {
+          console.log('foodSelect or priceInput not found');
+        }
+      }, 0);
+    });
+    // Kunsi Chatbot Logic
+const openBtn = document.getElementById('openKunsi');
+const closeKunsiBtn = document.getElementById('closeKunsi');
+const chatBox = document.getElementById('kunsiChat');
+const chatBody = document.getElementById('chatBody');
+const sendBtn = document.getElementById('sendKunsi');
+const input = document.getElementById('kunsiInput');
+
+openBtn.onclick = () => { chatBox.style.display = 'flex'; };
+closeKunsiBtn.onclick = () => { chatBox.style.display = 'none'; };
+
+function appendMessage(msg, sender) {
+  const div = document.createElement('div');
+  div.textContent = msg;
+  div.className = sender === 'user' ? 'user-msg' : 'kunsi-msg';
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// Simple AI response logic
+function getKunsiResponse(message) {
+  const msg = message.toLowerCase();
+  if (msg.includes('hello') || msg.includes('hi')) return "Hello! I'm Kunsi 🤖, your assistant. How can I help you today?";
+  if (msg.includes('food') || msg.includes('menu')) return "We have Chicken Biriyani, Porotta & Beef, Veg Meals, Shawarma, Shawaya, Kunsimol Fried Chicken, Kunsi Special, and Ali Ka Dhosth Tea. 🍽️";
+  if (msg.includes('location') || msg.includes('where')) return "We are located in Palakkad, Kerala, India. 📍";
+  if (msg.includes('contact') || msg.includes('phone') || msg.includes('email')) return "You can email us at kunsimol6037@example.com or call +91 999 888 8778.";
+  if (msg.includes('about')) return "Kunsimol Foods serves authentic Kerala cuisine made with love and fresh ingredients!";
+  return "I'm sorry, I didn't understand that. Ask me about our menu, location, or contact info!";
+}
+
+sendBtn.onclick = () => {
+  const msg = input.value.trim();
+  if (!msg) return;
+  appendMessage(msg, 'user');
+  input.value = '';
+  setTimeout(() => {
+    appendMessage(getKunsiResponse(msg), 'kunsi');
+  }, 500);
+};
+
+// Allow pressing Enter to send message
+input.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    sendBtn.click();
     e.preventDefault();
+  }
+});
 
-    const order = {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      phone: document.getElementById('phone').value,
-      date: document.getElementById('date').value,
-      time: document.getElementById('time').value,
-      type: document.getElementById('type').value,
-      requests: document.getElementById('requests').value,
-      createdAt: new Date().toLocaleString()
-    };
-
-    let orders = JSON.parse(localStorage.getItem('orders')) || [];
-    orders.push(order);
-    localStorage.setItem('orders', JSON.stringify(orders));
-
-    alert("Your booking has been submitted!");
-    this.reset();
-  });
   </script>
 
 </body>

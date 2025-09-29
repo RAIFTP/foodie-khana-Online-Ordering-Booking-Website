@@ -95,11 +95,7 @@ section h2 {
   transform: translateY(-8px);
 }
 
-.food-item img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-bottom: 4px solid #0099ff;
+  background: #f8f8f8;
 }
 
 .food-item h3 {
@@ -124,12 +120,14 @@ section h2 {
   cursor: pointer;
   transition: background 0.3s;
 }
-
-.food-item button:hover {
-  background-color: #006fd1;
+.food-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background: #f8f8f8;
 }
-
-/* Contact Section */
 #contact {
   background: #fff;
   border-radius: 10px;
@@ -182,4 +180,94 @@ footer {
   .hero p {
     font-size: 1rem;
   }
+}
+/* Kunsi Chatbot Styles */
+.kunsi-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #0099ff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 1000;
+}
+
+.kunsi-chat {
+  display: none;
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  width: 300px;
+  max-height: 400px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.chat-header {
+  background: #0099ff;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-body {
+  padding: 0.5rem;
+  height: 250px;
+  overflow-y: auto;
+  background: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.chat-footer {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.5rem;
+}
+
+.chat-footer input {
+  flex: 1;
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.chat-footer button {
+  background: #0099ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.user-msg {
+  align-self: flex-end;
+  background: #0099ff;
+  color: white;
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.kunsi-msg {
+  align-self: flex-start;
+  background: #eee;
+  color: #333;
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
 }

@@ -6,6 +6,21 @@
   <title>Kunsimol Foods</title>
   <link rel="stylesheet" href="nana.css" />
 </head>
+<!-- Kunsi AI Assistant -->
+<div id="kunsiChat" class="kunsi-chat">
+  <div class="chat-header">
+    <span>Kunsi 🤖</span>
+    <button id="closeKunsi">×</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-footer">
+    <input type="text" id="kunsiInput" placeholder="Ask Kunsi about our food or restaurant...">
+    <button id="sendKunsi">Send</button>
+  </div>
+</div>
+
+<button id="openKunsi" class="kunsi-btn">💬 Ask Kunsi</button>
+
 <body>
 
   <nav>
@@ -27,58 +42,109 @@
     <h2>Our Special Items</h2>
     <div class="food-grid">
       <div class="food-item">
-        <img src="img/1.jpg" alt="Biriyani">
-        <h3>Chicken Biriyani</h3>
-        <p>Delicious spicy biriyani with perfectly cooked chicken.</p>
-        <a href="order.html"><button>Buy Now</button></a>
+  <img src="img/1.jpg" alt="Biriyani">
+  <h3>Chicken Biriyani</h3>
+  <p>Delicious spicy biriyani with perfectly cooked chicken.</p>
+  <div class="price-box">₹150</div>
+  <button class="buy-btn" data-item="Chicken Biriyani" data-price="150">Buy Now</button>
+      </div>
+        <div class="food-item">
+          <img src="img/lavabiriyani.avif" alt="Lava Biriyani">
+          <h3>Lava Biriyani</h3>
+          <p>Fiery, flavorful biriyani with a molten spicy center. For the brave!</p>
+          <div class="price-box">₹250</div>
+          <button class="buy-btn" data-item="Lava Biriyani" data-price="250">Buy Now</button>
+        </div>
+        <div class="food-item">
+          <img src="img/malabarporotta.jpg" alt="Malabar Porotta">
+          <h3>Malabar Porotta</h3>
+          <p>Flaky, soft, and layered porotta—Kerala’s street food king.</p>
+          <div class="price-box">₹60</div>
+          <button class="buy-btn" data-item="Malabar Porotta" data-price="60">Buy Now</button>
+        </div>
+        <div class="food-item">
+          <img src="img/puttumkadal.jpg" alt="Puttum Kadala">
+          <h3>Puttum Kadala</h3>
+          <p>Steamed rice cake with spicy black chickpea curry. A breakfast legend!</p>
+          <div class="price-box">₹80</div>
+          <button class="buy-btn" data-item="Puttum Kadala" data-price="80">Buy Now</button>
+        </div>
+        <div class="food-item">
+          <img src="img/appamandstew.jpg" alt="Appam & Stew">
+          <h3>Appam & Stew</h3>
+          <p>Soft appams with creamy coconut stew. A Kerala breakfast classic!</p>
+          <div class="price-box">₹90</div>
+          <button class="buy-btn" data-item="Appam & Stew" data-price="90">Buy Now</button>
+        </div>
+        <div class="food-item">
+          <img src="img/fishcurrymeals.jpg" alt="Fish Curry Meals">
+          <h3>Fish Curry Meals</h3>
+          <p>Steamed rice with spicy Kerala fish curry and all the sides.</p>
+          <div class="price-box">₹180</div>
+          <button class="buy-btn" data-item="Fish Curry Meals" data-price="180">Buy Now</button>
+        </div>
+        <div class="food-item">
+          <img src="img/eggroast.jpg" alt="Egg Roast">
+          <h3>Egg Roast</h3>
+          <p>Boiled eggs in a spicy onion-tomato masala. Perfect with appam or parotta!</p>
+          <div class="price-box">₹70</div>
+          <button class="buy-btn" data-item="Egg Roast" data-price="70">Buy Now</button>
+        </div>
+      <div class="food-item">
+  <img src="img/2.jpg" alt="Porotta">
+  <h3>Porotta & Beef</h3>
+  <p>Soft Kerala porotta with spicy beef curry. A classic combo!</p>
+  <div class="price-box">₹180</div>
+  <button class="buy-btn" data-item="Porotta & Beef" data-price="180">Buy Now</button>
       </div>
       <div class="food-item">
-        <img src="img/2.jpg" alt="Porotta">
-        <h3>Porotta & Beef</h3>
-        <p>Soft Kerala porotta with spicy beef curry. A classic combo!</p>
-        <a href="order.html"><button>Buy Now</button></a>
+  <img src="img/3.jpg" alt="Meals">
+  <h3>Veg Meals</h3>
+  <p>Authentic Kerala meals served on banana leaf. Fresh & healthy.</p>
+  <div class="price-box">₹120</div>
+  <button class="buy-btn" data-item="Veg Meals" data-price="120">Buy Now</button>
       </div>
       <div class="food-item">
-        <img src="img/3.jpg" alt="Meals">
-        <h3>Veg Meals</h3>
-        <p>Authentic Kerala meals served on banana leaf. Fresh & healthy.</p>
-        <a href="order.html"><button>Buy Now</button></a>
+  <img src="img/shawarma roll.jpg" alt="shawarma roll">
+  <h3>Shawarma Roll</h3>
+  <p>Grilled shawarma wrapped in pita, with garlic mayo and veggies.</p>
+  <div class="price-box">₹90</div>
+  <button class="buy-btn" data-item="Shawarma Roll" data-price="90">Buy Now</button>
       </div>
       <div class="food-item">
-        <img src="img/shawarma roll.jpg" alt="shawarma roll">
-        <h3>Shawarma Roll</h3>
-        <p>Grilled shawarma wrapped in pita, with garlic mayo and veggies.</p>
-        <a href="order.html"><button>Buy Now</button></a>
+  <img src="img/shawarma plate.jpg" alt="shawarma plate">
+  <h3>Shawarma Plate</h3>
+  <p>Spiced chicken with hummus, salad, and warm pita.</p>
+  <div class="price-box">₹140</div>
+  <button class="buy-btn" data-item="Shawarma Plate" data-price="140">Buy Now</button>
       </div>
       <div class="food-item">
-        <img src="img/shawarma plate.jpg" alt="shawarma plate">
-        <h3>Shawarma Plate</h3>
-        <p>Spiced chicken with hummus, salad, and warm pita.</p>
-        <a href="order.html"><button>Buy Now</button></a>
+  <img src="img/shawai.webp" alt="shawaya">
+  <h3>Shawaya</h3>
+  <p>Marinated grilled meat over rice – smoky & satisfying.</p>
+  <div class="price-box">₹200</div>
+  <button class="buy-btn" data-item="Shawaya" data-price="200">Buy Now</button>
       </div>
       <div class="food-item">
-        <img src="img/shawai.webp" alt="shawaya">
-        <h3>Shawaya</h3>
-        <p>Marinated grilled meat over rice – smoky & satisfying.</p>
-        <a href="order.html"><button>Buy Now</button></a>
+  <img src="img/kunsimol fried chicken.png" alt="fried chicken">
+  <h3>Kunsimol Fried Chicken</h3>
+  <p>Golden crispy chicken with bold seasoning.</p>
+  <div class="price-box">₹160</div>
+  <button class="buy-btn" data-item="Kunsimol Fried Chicken" data-price="160">Buy Now</button>
       </div>
       <div class="food-item">
-        <img src="img/kunsimol fried chicken.png" alt="fried chicken">
-        <h3>Kunsimol Fried Chicken</h3>
-        <p>Golden crispy chicken with bold seasoning.</p>
-        <a href="order.html"><button>Buy Now</button></a>
+  <img src="img/kunsi special.png" alt="kunsi special">
+  <h3>Kunsi Special</h3>
+  <p>Slow-cooked spiced meat blend, our signature delight.</p>
+  <div class="price-box">₹220</div>
+  <button class="buy-btn" data-item="Kunsi Special" data-price="220">Buy Now</button>
       </div>
       <div class="food-item">
-        <img src="img/kunsi special.png" alt="kunsi special">
-        <h3>Kunsi Special</h3>
-        <p>Slow-cooked spiced meat blend, our signature delight.</p>
-        <a href="order.html"><button>Buy Now</button></a>
-      </div>
-      <div class="food-item">
-        <img src="img/ali ka dhosth.png" alt="ali ka dhosth">
-        <h3>Ali Ka Dhosth Tea</h3>
-        <p>Lightly spiced tea served hot or iced – your tea-time bestie.</p>
-        <a href="order.html"><button>Buy Now</button></a>
+  <img src="img/ali ka dhosth.png" alt="ali ka dhosth">
+  <h3>Ali Ka Dhosth Tea</h3>
+  <p>Lightly spiced tea served hot or iced – your tea-time bestie.</p>
+  <div class="price-box">₹40</div>
+  <button class="buy-btn" data-item="Ali Ka Dhosth Tea" data-price="40">Buy Now</button>
       </div>
     </div>
   </section>
@@ -95,6 +161,170 @@
   <footer>
     <p>&copy; 2025 Kunsimol. All rights reserved.</p>
   </footer>
+
+  <!-- Script for Buy Now buttons -->
+  <script>
+    document.querySelectorAll('.buy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.dataset.item;
+        const price = btn.dataset.price;
+        window.location.href = `order.html?item=${encodeURIComponent(item)}&price=${encodeURIComponent(price)}`;
+      });
+    });
+    // Kunsi Chatbot Logic
+const openBtn = document.getElementById('openKunsi');
+const closeBtn = document.getElementById('closeKunsi');
+const chatBox = document.getElementById('kunsiChat');
+const chatBody = document.getElementById('chatBody');
+const sendBtn = document.getElementById('sendKunsi');
+const input = document.getElementById('kunsiInput');
+
+openBtn.onclick = () => { chatBox.style.display = 'flex'; };
+closeBtn.onclick = () => { chatBox.style.display = 'none'; };
+
+function appendMessage(msg, sender) {
+  const div = document.createElement('div');
+  div.textContent = msg;
+  div.className = sender === 'user' ? 'user-msg' : 'kunsi-msg';
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// Simple AI response logic
+function getKunsiResponse(message) {
+  // Fuzzy match helper for typos
+  function fuzzyIncludes(str, arr) {
+    str = str.toLowerCase();
+    return arr.some(word => {
+      if (str.includes(word)) return true;
+      // Allow 1 character off (Levenshtein distance 1)
+      if (Math.abs(str.length - word.length) <= 1) {
+        let mismatches = 0;
+        for (let i = 0; i < Math.min(str.length, word.length); i++) {
+          if (str[i] !== word[i]) mismatches++;
+        }
+        mismatches += Math.abs(str.length - word.length);
+        if (mismatches <= 1) return true;
+      }
+      return false;
+    });
+  }
+  const msg = message.toLowerCase();
+  // Store last answer for repeat feature
+  if (!window.kunsiLastAnswer) window.kunsiLastAnswer = '';
+  // (Moved greeting check below food logic)
+  // Goodbye
+  if (fuzzyIncludes(msg, ['bye','goodbye','see you','cya'])) return window.kunsiLastAnswer = "Goodbye! Hope to see you soon at Kunsimol. Stay hungry, stay happy! 😊";
+  // Emotional responses
+  if (fuzzyIncludes(msg, ['sad','unhappy','depressed','upset'])) return window.kunsiLastAnswer = "Oh no! Sending you a virtual hug 🤗 and a plate of your favorite food. Remember, good food makes everything better!";
+  if (fuzzyIncludes(msg, ['hungry','starving','craving'])) return window.kunsiLastAnswer = "Hungry? You’ve come to the right place! Our Chicken Biriyani or Kunsimol Fried Chicken will fix that in no time!";
+  // Repeat last answer
+  if (fuzzyIncludes(msg, ['repeat','say again','once more'])) return window.kunsiLastAnswer || "I'm ready to help! Ask me anything about our food or restaurant.";
+  // Menu
+    if (msg.includes('food') || msg.includes('menu')) return window.kunsiLastAnswer = "🍽️ Feast your eyes! Our menu: Chicken Biriyani (₹150) – pure bliss, Porotta & Beef (₹180) – Kerala's pride, Veg Meals (₹120) – healthy & hearty, Shawarma Roll (₹90) – a flavor bomb, Shawarma Plate (₹140) – a party on your plate, Shawaya (₹200) – smoky magic, Kunsimol Fried Chicken (₹160) – crispy dreams, Kunsi Special (₹220) – our chef's secret, Ali Ka Dhosth Tea (₹40) – your new addiction, Lava Biriyani (₹250) – fiery and bold, Malabar Porotta (₹60) – street food king, Puttum Kadala (₹80) – breakfast legend, Egg Roast (₹70) – spicy and perfect, Appam & Stew (₹90) – coconutty comfort, Fish Curry Meals (₹180) – coastal classic! Want a spicy suggestion? Just ask!";
+  // What's popular
+  if (fuzzyIncludes(msg, ['popular','trending','famous','best seller'])) return window.kunsiLastAnswer = "Our most popular dishes right now: Chicken Biriyani, Kunsimol Fried Chicken, and Lava Biriyani! Customers can’t get enough. Want to try one?";
+  // Food trivia and Kerala facts
+  if (fuzzyIncludes(msg, ['trivia','fact','did you know','kerala'])) {
+    const facts = [
+      "Did you know? Kerala is called the 'Land of Spices' and is famous for its unique blend of flavors!",
+      "Fun fact: The word 'Biriyani' comes from the Persian word 'birian', which means 'fried before cooking'.",
+      "Kerala’s banana leaf meals are not just tasty—they’re eco-friendly too!",
+      "Puttu and Kadala is a classic Kerala breakfast, loved for generations.",
+      "Shawarma is actually a Middle Eastern dish, but Kerala has made it its own with unique spices!",
+      "Appam is made with fermented rice batter and coconut milk, giving it a soft, spongy texture.",
+      "Porotta is famous for its flaky layers—created by repeatedly folding and rolling the dough!",
+      "Fish curry in Kerala uses tamarind and coconut for a tangy, creamy flavor.",
+      "Tea (chai) is a big part of Kerala’s culture—try our Ali Ka Dhosth Tea for the real experience!"
+    ];
+    return window.kunsiLastAnswer = facts[Math.floor(Math.random() * facts.length)];
+  }
+  // New food item direct responses
+  if (fuzzyIncludes(msg, ['lava biriyani'])) return "Lava Biriyani is ₹250. Fiery, flavorful biriyani with a molten spicy center. Only for the brave!";
+  if (fuzzyIncludes(msg, ['malabar porotta'])) return "Malabar Porotta is ₹60. Flaky, soft, and Kerala’s street food king!";
+  if (fuzzyIncludes(msg, ['puttum kadala'])) return "Puttum Kadala is ₹80. Steamed rice cake with spicy black chickpea curry—a breakfast legend!";
+  if (fuzzyIncludes(msg, ['egg roast'])) return "Egg Roast is ₹70. Boiled eggs in spicy onion-tomato masala. Perfect with appam or porotta!";
+  if (fuzzyIncludes(msg, ['appam & stew','appam and stew'])) return "Appam & Stew is ₹90. Soft appams with creamy coconut stew—a Kerala breakfast classic!";
+  if (fuzzyIncludes(msg, ['fish curry meals'])) return "Fish Curry Meals is ₹180. Steamed rice with spicy Kerala fish curry and all the sides. Coastal comfort!";
+  // Food recommendation
+  if (msg.includes('recommend') || msg.includes('suggest')) return "If you love spicy, try our Chicken Biriyani or Kunsi Special! For something light, Veg Meals or Ali Ka Dhosth Tea is perfect. Want something crispy? Go for Kunsimol Fried Chicken!";
+  // Order status (simulated)
+  if (msg.includes('order status') || msg.includes('where is my order') || msg.includes('track')) return "To check your order status, please call us at +91 999 888 8778 or mention your order details here. We'll help you right away!";
+  // Jokes
+    if (msg.includes('joke')) {
+      const jokes = [
+        "Why did the chicken cross the road? To get to Kunsimol Foods, of course! 🍗😂",
+        "What do you call a fake noodle? An Impasta! 😆",
+        "Why don’t eggs tell jokes? They’d crack each other up! 🥚🤣",
+        "What did the hungry customer say at Kunsimol? 'I’m on a roll... a Shawarma Roll!' 😋",
+        "Why did the biriyani go to therapy? It had too many layers! 🍚🧠",
+        "Why did the porotta blush? Because it saw the curry! 😳🥘",
+        "What’s a chicken’s favorite movie? The Biriyani King! 👑🍗",
+        "Why did the tea go to school? To become a little 'chai-ld' prodigy! ☕🎓",
+        "Why did the fish curry get promoted? Because it was outstanding in its field! 🐟🌾",
+        "Why did the appam break up with the stew? It needed more space! 🥥💔"
+      ];
+      return window.kunsiLastAnswer = jokes[Math.floor(Math.random() * jokes.length)];
+    }
+  // Location
+  if (msg.includes('location') || msg.includes('where')) return "We are located in Palakkad, Kerala, India. 📍 Open 10AM–10PM every day!";
+  // Contact
+  if (msg.includes('contact') || msg.includes('phone') || msg.includes('email')) return "You can email us at kunsimol6037@example.com or call +91 999 888 8778. We're also on Instagram @kunsimol!";
+  // About
+  if (msg.includes('about')) return "Kunsimol Foods serves authentic Kerala cuisine made with love, fresh ingredients, and a touch of tradition. We deliver happiness!";
+  // Price lookup and food name triggers (typo-tolerant, multi-food)
+  const foodInfos = [
+    { names: ['chicken biriyani'], answer: "🤩 Chicken Biriyani is just ₹150! Spicy, aromatic, and a legend on your plate. One bite and you’ll be hooked!" },
+    { names: ['porotta & beef','porotta','beef'], answer: "Porotta & Beef is ₹180. Kerala’s classic combo – soft, flaky, and oh-so-satisfying!" },
+    { names: ['veg meals','vegetarian meals'], answer: "Veg Meals is ₹120. A banana leaf feast that’ll make your heart (and tummy) happy!" },
+    { names: ['shawarma roll'], answer: "Shawarma Roll is ₹90. Juicy, grilled, and wrapped with love. Street food dreams!" },
+    { names: ['shawarma plate'], answer: "Shawarma Plate is ₹140. Chicken, hummus, salad, pita – it’s a flavor festival!" },
+    { names: ['shawaya'], answer: "Shawaya is ₹200. Smoky, marinated, and unforgettable – a true showstopper!" },
+    { names: ['kunsimol fried chicken','fried chicken'], answer: "Kunsimol Fried Chicken is ₹160. Crispy, golden, and dangerously addictive!" },
+    { names: ['kunsi special'], answer: "Kunsi Special is ₹220. Our chef’s masterpiece – slow-cooked, spiced, and unforgettable!" },
+    { names: ['ali ka dhosth tea','ali ka dhosth'], answer: "Ali Ka Dhosth Tea is ₹40. The perfect chai hug to end your meal!" }
+  ];
+  let foundFoods = [];
+  for (const food of foodInfos) {
+    if (fuzzyIncludes(msg, food.names)) foundFoods.push(food.answer);
+  }
+  if (foundFoods.length === 1) return foundFoods[0];
+  if (foundFoods.length > 1) return foundFoods.join('\n');
+  // Sensational/fun responses for food names (typo-tolerant)
+  if (fuzzyIncludes(msg, ['shawaya'])) return "🔥 Shawaya is our smoky, marinated masterpiece—₹200. One bite and you’ll be dreaming of more! Ready to taste magic?";
+  if (fuzzyIncludes(msg, ['shawarma roll'])) return "🌯 Shawarma Roll is a crowd-pleaser—₹90. Grab one and let the good times roll!";
+  if (fuzzyIncludes(msg, ['kunsi special'])) return "✨ Kunsi Special is our signature dish—₹220. A must-try for foodies and flavor hunters!";
+  if (fuzzyIncludes(msg, ['chicken biriyani'])) return "🍗 Chicken Biriyani is legendary here—₹150. Spicy, satisfying, and made with love!";
+  if (fuzzyIncludes(msg, ['veg meals'])) return "🥗 Veg Meals—₹120. Healthy, hearty, and pure Kerala goodness!";
+  if (fuzzyIncludes(msg, ['porotta & beef'])) return "🥩 Porotta & Beef—₹180. The classic Kerala combo, made to melt in your mouth!";
+  if (fuzzyIncludes(msg, ['ali ka dhosth tea','ali ka dhosth'])) return "☕ Ali Ka Dhosth Tea—₹40. The best way to end your meal, with a smile!";
+  // Greetings (moved here to avoid 'hi' in 'chicken biriyani' bug)
+  if (msg.includes('hello') || msg.includes('hi')) return window.kunsiLastAnswer = "Hello! I'm Kunsi 🤖, your smart assistant. How can I help you today? Try asking for food recommendations, order status, or a joke!";
+  // Thanks
+  if (msg.includes('thank')) return window.kunsiLastAnswer = "Aww, you’re welcome! 😊 If you want a food joke, a spicy tip, or just to talk biriyani, I’m here for you! You’re the reason I love my job!";
+  // Fallback
+  return window.kunsiLastAnswer = "I'm Kunsi 🤖! You can ask about our menu, get food recommendations, check order status, hear a joke, or even learn a fun Kerala fact. Try me!";
+}
+
+sendBtn.onclick = () => {
+  const msg = input.value.trim();
+  if (!msg) return;
+  appendMessage(msg, 'user');
+  input.value = '';
+  setTimeout(() => {
+    appendMessage(getKunsiResponse(msg), 'kunsi');
+  }, 500);
+};
+
+// Allow pressing Enter to send message
+input.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    sendBtn.click();
+    e.preventDefault();
+  }
+});
+
+  </script>
 
 </body>
 </html>
