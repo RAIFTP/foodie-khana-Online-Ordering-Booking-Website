@@ -32,6 +32,23 @@
 
   <div class="container">
 
+    <!-- Cart Summary Section -->
+    <section id="cartSummarySection">
+      <h2>🛒 Your Order Summary</h2>
+      <div class="cart-summary">
+        <div id="cartItemsList" class="cart-items-display">
+          <!-- Cart items will be populated here -->
+        </div>
+        <div class="cart-total-display">
+          <strong>Total: ₹<span id="cartTotalDisplay">0</span></strong>
+        </div>
+        <div class="delivery-info">
+          <p><strong>Delivery:</strong> <span id="deliveryCharge">Free delivery above ₹500, otherwise ₹30</span></p>
+          <p><strong>Final Total:</strong> ₹<span id="finalTotal">0</span></p>
+        </div>
+      </div>
+    </section>
+
 
 
     <section>
@@ -48,11 +65,14 @@
         <input type="text" id="name" placeholder="Your Name" required>
         <input type="email" id="email" placeholder="Email Address" required>
         <input type="tel" id="phone" placeholder="Phone Number" required>
-        <input type="date" id="date" required>
-        <input type="time" id="time" required>
+        <label for="date" id="dateLabel">Date</label>
+        <input type="date" id="date" required placeholder="Select date" aria-labelledby="dateLabel">
+        <label for="time" id="timeLabel">Time</label>
+        <input type="time" id="time" required placeholder="Select time" aria-labelledby="timeLabel">
 
         <!-- Food Item Dropdown -->
-        <select id="foodItem" required>
+        <label for="foodItem" id="foodItemLabel">Food Item</label>
+        <select id="foodItem" required aria-labelledby="foodItemLabel">
           <option value="">Select Food Item</option>
           <option value="Chicken Biriyani">Chicken Biriyani</option>
           <option value="Porotta & Beef">Porotta & Beef</option>
@@ -91,7 +111,7 @@
       <div class="info-box">
         <p>Email: <a href="mailto:kunsimol6037@example.com">kunsimol6037@example.com</a></p>
         <p>Phone: <a href="tel:+919998888778">+91 999 888 8778</a></p>
-        <p>Instagram: <a href="https://instagram.com/kunsimol" target="_blank">@kunsimol</a></p>
+        <p>Instagram: <a href="https://instagram.com/kunsimol" target="_blank" rel="noopener">@kunsimol</a></p>
         <p>Location: Palakkad, Kerala, India</p>
       </div>
     </section>
@@ -122,56 +142,176 @@
     const modal = document.getElementById('signInModal');
     const closeBtn = document.querySelector('.modal .close');
 
-    signInBtn.onclick = function () {
-      modal.style.display = "block";
+    console.log('Sign-in elements:', { signInBtn, modal, closeBtn }); // Debug log
+
+    if (signInBtn) {
+      signInBtn.onclick = function () {
+        console.log('Sign-in button clicked'); // Debug log
+        if (modal) {
+          modal.style.display = "block";
+        } else {
+          console.error('Modal not found!');
+        }
+      }
+    } else {
+      console.error('Sign-in button not found!');
     }
 
-    closeBtn.onclick = function () {
-      modal.style.display = "none";
+    if (closeBtn) {
+      closeBtn.onclick = function () {
+        console.log('Close button clicked'); // Debug log
+        if (modal) {
+          modal.style.display = "none";
+        }
+      }
+    } else {
+      console.error('Close button not found!');
     }
 
     window.onclick = function (e) {
       if (e.target === modal) {
-        modal.style.display = "none";
+        console.log('Clicked outside modal'); // Debug log
+        if (modal) {
+          modal.style.display = "none";
+        }
       }
     }
 
-    document.getElementById('signInForm').onsubmit = function (e) {
-      e.preventDefault();
-      const email = e.target.querySelector('input[type="email"]').value.trim();
-      const password = e.target.querySelector('input[type="password"]').value;
-      if (email === "raif@gmail.com" && password === "raif") {
-        alert("Welcome Admin!");
-        window.location.href = "admin.html"; 
-      } else {
-        alert("Invalid credentials. Please try again.");
+    const signInForm = document.getElementById('signInForm');
+    if (signInForm) {
+      signInForm.onsubmit = function (e) {
+        e.preventDefault();
+        console.log('Sign-in form submitted'); // Debug log
+        
+        const emailInput = e.target.querySelector('input[type="email"]');
+        const passwordInput = e.target.querySelector('input[type="password"]');
+        
+        if (!emailInput || !passwordInput) {
+          console.error('Email or password input not found!');
+          alert('Form error! Please refresh the page.');
+          return;
+        }
+        
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        
+        console.log('Email:', email, 'Password:', password); // Debug log
+        
+        if (email === "raif@gmail.com" && password === "raif") {
+          alert("Welcome Admin!");
+          console.log('Redirecting to admin.html'); // Debug log
+          window.location.href = "admin.html"; 
+        } else {
+          alert("Invalid credentials. Please try again.");
+          console.log('Invalid credentials entered'); // Debug log
+        }
+        
+        if (modal) {
+          modal.style.display = "none";
+        }
       }
-      modal.style.display = "none";
+    } else {
+      console.error('Sign-in form not found!');
     }
 
     // Booking Form Logic (Store in localStorage)
-    document.getElementById('bookingForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    const bookingForm = document.getElementById('bookingForm');
+    if (bookingForm) {
+      bookingForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('Booking form submitted'); // Debug log
 
-      const order = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        date: document.getElementById('date').value,
-        time: document.getElementById('time').value,
-        foodItem: document.getElementById('foodItem').value, // store selected food
-        price: document.getElementById('price').value, // store price
-        requests: document.getElementById('requests').value,
-        createdAt: new Date().toLocaleString()
-      };
+        // Check if this is a cart order or single item order
+        const orderDetails = getQueryParam('order');
+        const cartTotal = getQueryParam('total');
+        
+        console.log('Order details:', orderDetails, 'Cart total:', cartTotal); // Debug log
+        
+        // Get form elements
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const dateInput = document.getElementById('date');
+        const timeInput = document.getElementById('time');
+        const requestsInput = document.getElementById('requests');
+        
+        if (!nameInput || !emailInput || !phoneInput || !dateInput || !timeInput) {
+          console.error('Required form elements not found!');
+          alert('Form error! Please refresh the page.');
+          return;
+        }
+        
+        const order = {
+          name: nameInput.value,
+          email: emailInput.value,
+          phone: phoneInput.value,
+          date: dateInput.value,
+          time: timeInput.value,
+          requests: requestsInput ? requestsInput.value : '',
+          createdAt: new Date().toLocaleString()
+        };
 
-      let orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders.push(order);
-      localStorage.setItem('orders', JSON.stringify(orders));
+        console.log('Basic order data:', order); // Debug log
+        
+        // Validate required fields
+        if (!order.name || !order.email || !order.phone || !order.date || !order.time) {
+          alert('Please fill in all required fields!');
+          console.log('Required field validation failed'); // Debug log
+          return;
+        }
 
-      alert("Your booking has been submitted!");
-      this.reset();
-    });
+        // Add cart or single item data
+        if (orderDetails && cartTotal) {
+          // Cart order
+          order.orderType = 'cart';
+          order.items = orderDetails;
+          order.cartTotal = parseInt(cartTotal);
+          order.deliveryCharge = parseInt(cartTotal) >= 500 ? 0 : 30;
+          order.finalTotal = order.cartTotal + order.deliveryCharge;
+          console.log('Cart order created:', order); // Debug log
+        } else {
+          // Single item order
+          const foodSelect = document.getElementById('foodItem');
+          const priceInput = document.getElementById('price');
+          
+          order.orderType = 'single';
+          order.foodItem = foodSelect ? foodSelect.value : '';
+          order.price = priceInput ? priceInput.value : '';
+          order.finalTotal = parseInt(order.price || 0);
+          
+          console.log('Single order created:', order); // Debug log
+          
+          // Validate that food item is selected for single orders
+          if (!order.foodItem && !orderDetails) {
+            alert('Please select a food item!');
+            console.log('Food item validation failed'); // Debug log
+            return;
+          }
+        }
+
+        try {
+          let orders = JSON.parse(localStorage.getItem('orders')) || [];
+          orders.push(order);
+          localStorage.setItem('orders', JSON.stringify(orders));
+          
+          console.log('Order saved to localStorage:', orders); // Debug log
+
+          alert("Your booking has been submitted!");
+          this.reset();
+          
+          // Hide cart summary after successful submission
+          const cartSection = document.getElementById('cartSummarySection');
+          if (cartSection) {
+            cartSection.classList.remove('show');
+          }
+        } catch (error) {
+          console.error('Error saving order:', error);
+          alert('Error saving your order. Please try again.');
+        }
+      });
+    } else {
+      console.error('Booking form not found!');
+    }
 
     // Pre-select food item if passed in URL
     function getQueryParam(param) {
@@ -179,7 +319,67 @@
       return urlParams.get(param);
     }
 
+    // Cart functionality - parse cart data from URL
+    function displayCartSummary() {
+      const orderDetails = getQueryParam('order');
+      const total = getQueryParam('total');
+      
+      if (orderDetails && total) {
+        const cartSection = document.getElementById('cartSummarySection');
+        const cartItemsList = document.getElementById('cartItemsList');
+        const cartTotalDisplay = document.getElementById('cartTotalDisplay');
+        const finalTotalDisplay = document.getElementById('finalTotal');
+        
+        if (cartSection && cartItemsList && cartTotalDisplay && finalTotalDisplay) {
+          // Show cart summary section
+          cartSection.classList.add('show');
+          
+          // Parse and display cart items
+          const items = orderDetails.split(', ');
+          cartItemsList.innerHTML = items.map(item => `
+            <div class="cart-item-display">
+              <span>${item}</span>
+            </div>
+          `).join('');
+          
+          // Display totals
+          const cartTotal = parseInt(total);
+          cartTotalDisplay.textContent = cartTotal;
+          
+          // Calculate delivery charge
+          const deliveryCharge = cartTotal >= 500 ? 0 : 30;
+          const finalTotal = cartTotal + deliveryCharge;
+          finalTotalDisplay.textContent = finalTotal;
+          
+          // Update delivery info
+          const deliveryChargeSpan = document.getElementById('deliveryCharge');
+          if (deliveryChargeSpan) {
+            deliveryChargeSpan.textContent = cartTotal >= 500 ? 'Free delivery!' : 'Delivery charge: ₹30';
+          }
+          
+          // Hide food item selection in booking form and show cart info instead
+          const foodSelect = document.getElementById('foodItem');
+          const priceInput = document.getElementById('price');
+          const foodLabel = document.querySelector('label[for="foodItem"]');
+          if (foodSelect && priceInput) {
+            foodSelect.style.display = 'none';
+            priceInput.style.display = 'none';
+            if (foodLabel) foodLabel.style.display = 'none';
+            
+            // Remove required attribute when coming from cart
+            foodSelect.removeAttribute('required');
+            
+            // Pre-fill with cart data
+            priceInput.value = finalTotal;
+          }
+        }
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      // Display cart summary if coming from checkout
+      displayCartSummary();
+      
       setTimeout(function() {
         const foodItem = getQueryParam('item');
         // Fixed prices for each food item
